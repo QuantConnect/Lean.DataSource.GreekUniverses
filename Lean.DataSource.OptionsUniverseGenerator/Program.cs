@@ -39,5 +39,11 @@ namespace QuantConnect.DataSource.OptionsUniverseGenerator
         {
             return new OptionsUniverseGenerator(processingDate, securityType, market, dataFolderRoot, outputFolderRoot);
         }
+
+        protected override DerivativeUniverseGenerator.AdditionalFieldGenerator GetAdditionalFieldGenerator(DateTime processingDate,
+            string outputFolderRoot)
+        {
+            return new OptionAdditionalFieldGenerator(processingDate, outputFolderRoot);
+        }
     }
 }

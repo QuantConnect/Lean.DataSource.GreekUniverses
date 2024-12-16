@@ -118,13 +118,6 @@ namespace Lean.DataSource.DerivativeUniverseGenerator
                         var fileInfo = new FileInfo(fileName);
                         var fileNameParts = fileInfo.Name.Split('_');
 
-                        if (resolution == Resolution.Minute)
-                        {
-                            return fileNameParts.Length == 3 &&
-                                   fileNameParts[0] == dateStr &&
-                                   fileNameParts[1] == tickTypeLower;
-                        }
-
                         return fileNameParts.Length == 4 &&
                                    fileNameParts[1] == dateStr &&
                                    fileNameParts[2] == tickTypeLower;

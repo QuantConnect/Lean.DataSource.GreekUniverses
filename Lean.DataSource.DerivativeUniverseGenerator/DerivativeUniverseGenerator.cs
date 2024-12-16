@@ -79,6 +79,10 @@ namespace QuantConnect.DataSource.DerivativeUniverseGenerator
             _outputFolderRoot = outputFolderRoot;
 
             _universesOutputFolderRoot = Path.Combine(_outputFolderRoot, _securityType.SecurityTypeToLower(), _market, "universes");
+            if (!Directory.Exists(_universesOutputFolderRoot))
+            {
+                Directory.CreateDirectory(_universesOutputFolderRoot);
+            }
 
             _dataProvider = Composer.Instance.GetExportedValueByTypeName<IDataProvider>(Config.Get("data-provider", "DefaultDataProvider"));
 

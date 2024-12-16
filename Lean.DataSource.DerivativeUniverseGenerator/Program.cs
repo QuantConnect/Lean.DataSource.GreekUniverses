@@ -20,6 +20,7 @@ using System;
 
 using QuantConnect.Configuration;
 using QuantConnect.Logging;
+using System.IO;
 
 namespace QuantConnect.DataSource.DerivativeUniverseGenerator
 {
@@ -73,6 +74,23 @@ namespace QuantConnect.DataSource.DerivativeUniverseGenerator
                 Environment.Exit(1);
             }
 
+            var universeOutputPath = Path.Combine(outputFolderRoot, securityType.SecurityTypeToLower(), market, "universes");
+            var optionsAdditionalFieldGenerator = GetAdditionalFieldGenerator(processingDate, universeOutputPath);
+
+            try
+            {
+                if (!optionsAdditionalFieldGenerator.Run())
+                {
+                    Log.Error($"QuantConnect.DataSource.DerivativeUniverseGenerator.Program.Main(): Failed to generate additional fields.");
+                    Environment.Exit(1);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"QuantConnect.DataSource.DerivativeUniverseGenerator.Program.Main(): Error generating additional fields.");
+                Environment.Exit(1);
+            }
+
             Log.Trace($"QuantConnect.DataSource.DerivativeUniverseGenerator.Program.Main(): DONE in {timer.Elapsed:g}");
 
             Environment.Exit(0);
@@ -80,6 +98,8 @@ namespace QuantConnect.DataSource.DerivativeUniverseGenerator
 
         protected abstract DerivativeUniverseGenerator GetUniverseGenerator(SecurityType securityType, string market, string dataFolderRoot,
             string outputFolderRoot, DateTime processingDate);
+
+        protected abstract AdditionalFieldGenerator GetAdditionalFieldGenerator(DateTime processingDate, string outputFolderRoot);
 
         /// <summary>
         /// Validate and extract command line args and configuration options.
